@@ -1,0 +1,29 @@
+# fly.toml app configuration file generated for ahmed-adel-portfolio
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "ahmed-adel-portfolio" # REPLACE this with your chosen fly app name
+primary_region = "ams" # e.g. 'ams' (Amsterdam), 'iad' (Ashburn) -- update to your nearest region
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "3000"
+  NODE_ENV = "production"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+[[http_service.checks]]
+  grace_period = "10s"
+  interval = "30s"
+  timeout = "2s"
+  method = "GET"
+  path = "/api/health"
