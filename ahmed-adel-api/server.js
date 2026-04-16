@@ -65,21 +65,14 @@ app.get('/api/health', (_req, res) => {
 app.use(errorHandler);
 
 // ---------------------------------------------------------------------------
-// Serve React App in Production
+// Serve React App in Production (Managed by Vercel rewrites in production)
 // ---------------------------------------------------------------------------
-// Serve static frontend build files with aggressive caching for assets
-app.use(express.static(path.join(__dirname, 'client'), {
-  maxAge: '1y',
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache');
-  }
-}));
-
-// The "catchall" handler: for any request that doesn't match an API route or static file,
-// send back React's index.html file to handle SPA routing.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'index.html'));
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.use(express.static(path.join(__dirname, 'client')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'index.html'));
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Start Server
