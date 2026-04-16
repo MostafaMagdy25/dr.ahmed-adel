@@ -3,7 +3,7 @@
  * Replaces localStorage with real REST API calls to the backend.
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
 
 // Derive the server origin from API_BASE (strip trailing /api)
 const SERVER_BASE = API_BASE.replace(/\/api\/?$/, '');

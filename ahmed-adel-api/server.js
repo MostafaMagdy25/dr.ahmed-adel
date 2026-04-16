@@ -84,13 +84,17 @@ app.get('*', (req, res) => {
 // ---------------------------------------------------------------------------
 // Start Server
 // ---------------------------------------------------------------------------
+// Connect to Database
+connectDB();
+
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(() => {
+// Only start the server if not running in a serverless environment (like Vercel)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`\n🚀  Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
     console.log(`📡  API:  http://localhost:${PORT}/api/health\n`);
   });
-});
+}
 
 module.exports = app;
